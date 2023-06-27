@@ -1,0 +1,17 @@
+@import '/src/styles/variables.scss';
+
+.listItem {
+    border-bottom: 2px solid $main;
+    padding: 6px 16px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    line-height: 20px;
+
+    &:hover {
+        cursor: pointer;
+        background: rgba(37, 127, 234, 0.20);
+
+    }
+}

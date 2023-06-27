@@ -1,0 +1,18 @@
+@import '/src/styles/variables.scss';
+
+.text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .category {
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 20px;
+    }
+
+    .description {
+        color: $grey;
+        line-height: 20px;
+    }
+}

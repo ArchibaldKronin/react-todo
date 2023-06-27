@@ -1,0 +1,15 @@
+@import '/src/styles/variables.scss';
+
+.saveBtn {
+    padding: 2px 62px;
+}
+
+.requiredStar {
+    color: $error;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}

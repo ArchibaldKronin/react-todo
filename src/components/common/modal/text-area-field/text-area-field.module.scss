@@ -1,0 +1,15 @@
+@import '/src/styles/variables.scss';
+
+.textArea {
+    width: 100%;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    font-size: 20px;
+    resize: none;
+    overflow: hidden;
+
+    &::placeholder {
+        color: rgba(0, 0, 0, 0.5);
+    }
+}
