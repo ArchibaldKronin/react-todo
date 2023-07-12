@@ -13,11 +13,7 @@ import { editCategory } from '../../store/category-slice';
 
 // export const EditCategoryModal = ({ onClose, id, title, description }) => {
 export const EditCategoryModal = ({ onClose, propsCategory }) => {
-    const [category, setCategory] = useState({
-        title: propsCategory.title,
-        description: propsCategory.description,
-        id: propsCategory.id,
-    });
+    const [category, setCategory] = useState(propsCategory);
 
     const dispatch = useDispatch();
 
@@ -28,7 +24,7 @@ export const EditCategoryModal = ({ onClose, propsCategory }) => {
         })
     }
 
-    const handleSaveClick = ({ id, title, description }) => {
+    const handleSaveClick = () => {
         dispatch(editCategory(category));
         onClose();
     }
@@ -41,7 +37,7 @@ export const EditCategoryModal = ({ onClose, propsCategory }) => {
                     <form className={styles.form}>
                         <Field legend={<>Имя<span className={styles.requiredStar}>*</span></>}>
                             <InputField id='title' onChange={handleChange}
-                                value={category.title} maxLengtn={80} />
+                                value={category.title} maxLength={80} />
                         </Field>
                         <Field legend='Описание'>
                             <TextAreaField id='description' onChange={handleChange}
@@ -51,7 +47,7 @@ export const EditCategoryModal = ({ onClose, propsCategory }) => {
                 </ModalContent>
                 <ModalActions>
                     <Button variant='filled' className={styles.saveBtn}
-                        disabled={!category.title} onClick={() => { handleSaveClick(category) }}>Сохранить</Button>
+                        disabled={!category.title} onClick={() => { handleSaveClick() }}>Сохранить</Button>
                     <Button variant='outlined' onClick={onClose}>Закрыть</Button>
                 </ModalActions>
             </Modal>

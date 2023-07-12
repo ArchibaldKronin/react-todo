@@ -1,0 +1,7 @@
+@import '/src/styles/variables.scss';
+
+.extraDescription {
+    display: flex;
+    gap: 4px;
+    color: $main;
+}

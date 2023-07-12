@@ -16,8 +16,8 @@ export const YnModal = ({ onSubmit, onClose, question, children }) => {
                     <ModalText>{question}</ModalText>
                 </ModalContent>
                 <ModalActions>
-                    <Button onClick={onSubmit} className={styles.submitBtn} variant='filled'>Да</Button>
-                    <Button onClick={onClose} variant='outlined'>Нет</Button>
+                    <Button onClick={onSubmit} className={styles.ynButtons} variant='filled'>Да</Button>
+                    <Button onClick={onClose} className={styles.ynButtons} variant='outlined'>Нет</Button>
                 </ModalActions>
             </Modal>
         </>

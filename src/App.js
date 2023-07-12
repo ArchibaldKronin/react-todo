@@ -6,7 +6,14 @@ import { Content } from './components/content/content';
 import { List } from './components/common/list/list';
 import { ToDoListItem } from './components/todo-list-item/todo-list-item';
 import { CategoryList } from './components/category-list/category-list';
+import { Route, Routes } from 'react-router-dom';
+import { TaskList } from './components/task-list/task-list';
 
+export const routes = {
+  home: "/",
+  tasks: "/tasks",
+  categories: "/categories",
+}
 
 function App() {
   // const dispatch = useDispatch();
@@ -21,7 +28,12 @@ function App() {
     <Header />
     {/* <button onClick={handleClickAddCategoryButton}>добавить категорию</button> */}
     <Content>
-      <CategoryList />
+      <Routes>
+        <Route path={routes.home} element={<h1>Home</h1>} />
+        <Route path={routes.tasks} element={<TaskList />} />
+        <Route path={routes.categories} element={<CategoryList />} />
+      </Routes>
+      {/* <CategoryList /> */}
     </Content>
   </>;
 }

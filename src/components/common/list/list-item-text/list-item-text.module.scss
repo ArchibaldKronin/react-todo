@@ -5,10 +5,16 @@
     flex-direction: column;
     gap: 4px;
 
-    .category {
-        font-weight: 500;
-        font-size: 18px;
-        line-height: 20px;
+    .title {
+        display: flex;
+        gap: 16px;
+        line-height: 24px;
+
+        .category {
+            font-weight: 500;
+            font-size: 18px;
+        }
+
     }
 
     .description {
