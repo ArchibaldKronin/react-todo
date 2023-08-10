@@ -13,9 +13,10 @@ import { TextAreaField } from '../common/modal/text-area-field/text-area-field';
 import { selectAllCategories } from '../../store/category-slice';
 import { editTask } from '../../store/task-slice';
 import { Button } from '../common/button/button';
+import { updateTodo } from '../../store/effects/todos-effects';
 
-export const EditTaskModal = ({ onClose, propsTask }) => {
-    const [task, setTask] = useState(propsTask);
+export const EditTaskModal = ({ onClose, propsTask: { id, title, description, categoryId } }) => {
+    const [task, setTask] = useState({ id, title, description, categoryId });
 
     const dispatch = useDispatch();
 
@@ -34,7 +35,8 @@ export const EditTaskModal = ({ onClose, propsTask }) => {
     }
 
     const handleSaveClick = () => {
-        dispatch(editTask(task));
+        // dispatch(editTask(task));
+        dispatch(updateTodo(task));
         onClose();
     }
 

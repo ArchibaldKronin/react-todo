@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAllCategories, selectAllCategoriesObject } from '../../store/category-slice';
 import { SelectField } from '../common/modal/select-field/select-field';
 import { addTask } from '../../store/task-slice';
+import { createTodo } from '../../store/effects/todos-effects';
 
 export const AddTaskModal = ({ onClose }) => {
     const categoriesObj = useSelector(selectAllCategoriesObject);
@@ -42,7 +43,8 @@ export const AddTaskModal = ({ onClose }) => {
     }
 
     const handleSubmitClick = () => {
-        dispatch(addTask(task));
+        // dispatch(addTask(task));
+        dispatch(createTodo(task));
         onClose();
     }
 

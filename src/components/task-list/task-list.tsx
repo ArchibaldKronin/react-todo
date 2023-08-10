@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './task-list.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteTask, selectAllTasks, selectAllTasksObject } from '../../store/task-slice';
+import { deleteTask, selectAllTasks, selectAllTasksObject, selectTaskLoader } from '../../store/task-slice';
 import { ListItem } from '../common/list/list-item/list-item';
 import { ListItemText } from '../common/list/list-item-text/list-item-text';
 import { List } from '../common/list/list';
@@ -14,11 +14,32 @@ import { selectAllCategoriesObject } from '../../store/category-slice';
 import { ExtraDescription } from '../common/extra-descrioption/extra-descrioption';
 import { YnModal } from '../yn-modal/yn-modal';
 import { EditTaskModal } from '../edit-task-modal/edit-task-modal';
+import axios from 'axios';
+import { Todo } from '../../types/todo';
+import { useAppDispatch } from '../../store/store';
+import { deleteTodo, fetchTodos } from '../../store/effects/todos-effects';
+import { Loader } from '../loader/loader';
 
 export const TaskList = () => {
+    // useEffect(() => {
+    //     const fetchTodos = async () => {
+    //         const response = await axios.get<Todo[]>('http://localhost:7000/todos');
+
+    //         console.log({ todos: response.data })
+    //     }
+
+    //     fetchTodos();
+    // }, [])
+
     const tasks = useSelector(selectAllTasks);
     const tasksObj = useSelector(selectAllTasksObject);
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
+
+    const isLoading = useSelector(selectTaskLoader);
+
+    useEffect(() => {
+        dispatch(fetchTodos());
+    }, [])
 
     //ЭТО ПЕРЕДЕЛАТЬ НАВЕРНОЕ
     const categoriesObj = useSelector(selectAllCategoriesObject);
@@ -34,7 +55,7 @@ export const TaskList = () => {
 
     const [deleteModalSettings, setDeleteModalSettings] = useState({ isOpen: false, id: 0 });
 
-    const handleDeleteClick = (id) => {
+    const handleDeleteClick = (id: number) => {
         setDeleteModalSettings({ isOpen: true, id: id });
     }
 
@@ -42,12 +63,13 @@ export const TaskList = () => {
         setDeleteModalSettings({ isOpen: false, id: 0 });
     }
 
-    const handleDelete = (id) => {
-        dispatch(deleteTask({ id }));
+    const handleDelete = (id: number) => {
+        // dispatch(deleteTask({ id }));
+        dispatch(deleteTodo(id));
         setDeleteModalSettings({ isOpen: false, id: 0 });
     }
 
-    const handleEditModalModalOpen = ({ id, title, description, categoryId }) => {
+    const handleEditModalModalOpen = ({ id, title, description, categoryId }: any) => {
         setEditingModalSettings({
             isOpen: true,
             id: id,
@@ -70,7 +92,7 @@ export const TaskList = () => {
     return (
         <>
             <List>
-                {tasks.map(task =>
+                {isLoading ? <Loader/> : tasks.map(task =>
                     <ListItem key={task.id}>
                         <ListItemText title={task.title} description={task.description} >
                             {
@@ -84,7 +106,7 @@ export const TaskList = () => {
                             </ExtraDescription> */}
                         </ListItemText>
                         <ListItemActions>
-                            <Button className={styles.iconButton} onClick={()=>{handleEditModalModalOpen(task)}}>
+                            <Button className={styles.iconButton} onClick={() => { handleEditModalModalOpen(task) }}>
                                 <PenIcon />
                             </Button>
                             <Button className={styles.iconButton} onClick={() => { handleDeleteClick(task.id) }}>
@@ -95,10 +117,10 @@ export const TaskList = () => {
                     </ListItem>)}
             </List>
 
-            {EditingModalSettings.isOpen && <EditTaskModal propsTask={EditingModalSettings} onClose={handleEditModalModalClose}/>}
+            {EditingModalSettings.isOpen && <EditTaskModal propsTask={EditingModalSettings} onClose={handleEditModalModalClose} />}
             {deleteModalSettings.isOpen &&
-                <YnModal onClose={handleDeleteClose} onSubmit={()=>{handleDelete(deleteModalSettings.id)}}
-                question={`Вы уверены, что хотите удалить задачу "${tasksObj[deleteModalSettings.id].title}"?`}>
+                <YnModal onClose={handleDeleteClose} onSubmit={() => { handleDelete(deleteModalSettings.id) }}
+                    question={`Вы уверены, что хотите удалить задачу "${tasksObj[deleteModalSettings.id].title}"?`}>
                     Удаление задачи
                 </YnModal>}
         </>
