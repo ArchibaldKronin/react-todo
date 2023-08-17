@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCategory, selectAllCategories, selectAllCategoriesObject } from '../../store/category-slice';
+import { deleteCategory, selectAllCategories, selectAllCategoriesObject, selectCategoriesLoader } from '../../store/category-slice';
 import { List } from '../common/list/list';
 import { ToDoListItem } from '../todo-list-item/todo-list-item';
 import { ListItem } from '../common/list/list-item/list-item';
@@ -13,12 +13,21 @@ import { BinIcon } from '../common/icons/bin-icon';
 import { EditCategoryModal } from '../edit-category-modal/edit-category-modal';
 import { YnModal } from '../yn-modal/yn-modal';
 import { deleteAllTasksInCategory } from '../../store/task-slice';
+import { deleteCategoryAsync, fetchCategories } from '../../store/effects/category-effects';
+import { Loader } from '../loader/loader';
+import { updateTodosCategoryToDefault } from '../../store/effects/todos-effects';
 
 export const CategoryList = () => {
     const categories = useSelector(selectAllCategories) // селектор для доступа к стору
     const categoriesObj = useSelector(selectAllCategoriesObject);
-    // const dispatch = useDispatch(selectAllCategories);
     const dispatch = useDispatch();
+
+    const isLoading = useSelector(selectCategoriesLoader);
+
+    useEffect(() => {
+        dispatch(fetchCategories());
+    }, [])
+
 
     const [EditingModalSettings, setEditingModalSettings] = useState({
         isOpen: false,
@@ -38,8 +47,10 @@ export const CategoryList = () => {
     }
 
     const handleDelete = (id) => {
-        dispatch(deleteCategory({ id }));
-        dispatch(deleteAllTasksInCategory({id}));
+        // dispatch(deleteCategory({ id }));
+        // dispatch(deleteAllTasksInCategory({ id }));
+        dispatch(updateTodosCategoryToDefault({ id }));
+        dispatch(deleteCategoryAsync(id));
         setDeleteModalSettings({ isOpen: false, id: 0 });
     }
 
@@ -64,7 +75,7 @@ export const CategoryList = () => {
     return (
         <>
             <List>
-                {categories.map(category =>
+                {isLoading ? <Loader /> : categories.map(category =>
                     category.id != 1 ?
                         <ListItem key={category.id}>
                             <ListItemText title={category.title} description={category.description} />

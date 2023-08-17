@@ -10,10 +10,11 @@ import { TextAreaField } from '../common/modal/text-area-field/text-area-field';
 import { ModalActions } from '../common/modal/modal-actions/modal-actions';
 import { useDispatch } from 'react-redux';
 import { editCategory } from '../../store/category-slice';
+import { updateCategory } from '../../store/effects/category-effects';
 
 // export const EditCategoryModal = ({ onClose, id, title, description }) => {
-export const EditCategoryModal = ({ onClose, propsCategory }) => {
-    const [category, setCategory] = useState(propsCategory);
+export const EditCategoryModal = ({ onClose, propsCategory: { id, title, description } }) => {
+    const [category, setCategory] = useState({ id, title, description });
 
     const dispatch = useDispatch();
 
@@ -25,7 +26,7 @@ export const EditCategoryModal = ({ onClose, propsCategory }) => {
     }
 
     const handleSaveClick = () => {
-        dispatch(editCategory(category));
+        dispatch(updateCategory(category));
         onClose();
     }
 
@@ -51,7 +52,6 @@ export const EditCategoryModal = ({ onClose, propsCategory }) => {
                     <Button variant='outlined' onClick={onClose}>Закрыть</Button>
                 </ModalActions>
             </Modal>
-            {/* мой {key} тебе в рот не поместится */}
         </div>
     )
 }

@@ -10,6 +10,7 @@ import { InputField } from '../common/modal/input-field/input-field';
 import { TextAreaField } from '../common/modal/text-area-field/text-area-field';
 import { useDispatch } from 'react-redux';
 import { addCategory } from '../../store/category-slice';
+import { createCategory } from '../../store/effects/category-effects';
 
 export const AddCategoryModal = ({ onClose }) => {
     const [category, setCategory] = useState({
@@ -27,7 +28,8 @@ export const AddCategoryModal = ({ onClose }) => {
     }
 
     const handleSubmitClick = () => {
-        dispatch(addCategory(category));
+        // dispatch(addCategory(category));
+        dispatch(createCategory(category));
         onClose();
     }
 

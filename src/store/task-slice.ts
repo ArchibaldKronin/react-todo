@@ -51,7 +51,6 @@ const taskSlice = createSlice({
             const deletableId = action.payload.id;
             for (let key in state) {
                 if (state.data[key].categoryId == deletableId)
-                    // delete state[key];
                     state.data[key].categoryId = 1;
             }
         }

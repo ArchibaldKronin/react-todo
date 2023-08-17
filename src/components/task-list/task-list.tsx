@@ -94,6 +94,9 @@ export const TaskList = () => {
             <List>
                 {isLoading ? <Loader/> : tasks.map(task =>
                     <ListItem key={task.id}>
+                        {
+                                console.log(task.categoryId, task.categoryId, task.title, task.description)
+                        }
                         <ListItemText title={task.title} description={task.description} >
                             {
                                 task.categoryId != 1 &&

@@ -1,11 +1,15 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
+import { fetchCategories } from "./effects/category-effects";
 
 const initialState = {
-    1: {
-        id: 1,
-        title: 'Нет категории',
-        description: 'Default description'
+    data: {
+        1: {
+            id: 1,
+            title: 'Нет категории',
+            description: 'Default description'
+        },
     },
+    loading: false,
 };
 
 const categoriesSlice = createSlice({
@@ -22,22 +26,36 @@ const categoriesSlice = createSlice({
                     }
                 }
             },
-            reducer: (state, action) => { state[action.payload.id] = action.payload }
+            reducer: (state, action) => { state.data[action.payload.id] = action.payload }
         },
         deleteCategory: (state, action) => {
-            delete state[action.payload.id];
+            delete state.data[action.payload.id];
         },
         editCategory: (state, action) => {
-            state[action.payload.id] = action.payload
+            state.data[action.payload.id] = action.payload
         }
     },
-})
+    extraReducers: (builder) => builder.addCase(fetchCategories.fulfilled, (state, { payload }) => {
+        const categories = payload.reduce((acc, cur) => {
+            acc[cur.id] = cur;
+            return acc;
+        }, {});
+
+        state.data = categories;
+        state.loading = false;
+    })
+    .addCase(fetchCategories.pending, (state) => {
+        state.loading = true;
+    })
+});
 
 export const { addCategory, deleteCategory, editCategory } = categoriesSlice.actions;
 
-export const selectAllCategoriesObject = (state) => state.categories;
+export const selectAllCategoriesObject = (state) => state.categories.data;
 
 export const selectAllCategories = createSelector(selectAllCategoriesObject, categories => Object.values(categories));
+
+export const selectCategoriesLoader = (state) => state.categories.loading;
 
 export default categoriesSlice.reducer;
 
