@@ -77,4 +77,14 @@ export const selectAllTasks = createSelector(selectAllTasksObject, tasks => Obje
 
 export const selectTaskLoader = (state: RootState) => state.tasks.loading;
 
+// export const selectTasksByCategoryId = createSelector([selectAllTasks, (_, id: number) => id], (tasks, id) => {
+//     return tasks.filter(task => task.categoryId === id);
+// })
+
+export const selectTasksByCategoryId = (state: RootState, id: number) => {
+    const tasks = selectAllTasks(state);
+
+    return tasks.filter(task => +task.categoryId === +id);
+}
+
 export default taskSlice.reducer;

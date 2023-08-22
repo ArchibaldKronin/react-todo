@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Header } from "./components/header/header";
 import { addCategory, selectAllCategories } from './store/category-slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,10 @@ import { ToDoListItem } from './components/todo-list-item/todo-list-item';
 import { CategoryList } from './components/category-list/category-list';
 import { Route, Routes } from 'react-router-dom';
 import { TaskList } from './components/task-list/task-list';
+import { HomePage } from './pages/home-page/home-page';
+import { fetchCategories } from './store/effects/category-effects';
+import { fetchTodos } from './store/effects/todos-effects';
+import { Loader } from './components/loader/loader';
 
 export const routes = {
   home: "/",
@@ -22,19 +26,29 @@ function App() {
   //   dispatch(addCategory({ title: 'Test', description: 'jopa govno o4ko' }));
   // }
 
+  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    Promise.all([dispatch(fetchCategories()), dispatch(fetchTodos())]).then(() => {
+      setIsLoading(false);
+    });
+  }, []);
+
 
 
   return <>
     <Header />
     {/* <button onClick={handleClickAddCategoryButton}>добавить категорию</button> */}
-    <Content>
-      <Routes>
-        <Route path={routes.home} element={<h1>Home</h1>} />
-        <Route path={routes.tasks} element={<TaskList />} />
-        <Route path={routes.categories} element={<CategoryList />} />
-      </Routes>
-      {/* <CategoryList /> */}
-    </Content>
+    {isLoading ? <Loader /> :
+      <Content>
+        <Routes>
+          <Route path={routes.home} element={<HomePage />} />
+          <Route path={routes.tasks} element={<TaskList />} />
+          <Route path={routes.categories} element={<CategoryList />} />
+        </Routes>
+      </Content>
+    }
   </>;
 }
 
